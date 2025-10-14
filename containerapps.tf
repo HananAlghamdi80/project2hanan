@@ -12,7 +12,7 @@ resource "azurerm_container_app_environment" "cae" {
 }
 
 #############################################
-# 🧱 Backend Container App
+# 🧱 Backend Container App (Private)
 #############################################
 resource "azurerm_container_app" "backend" {
   name                         = "p2-backend"
@@ -51,7 +51,7 @@ resource "azurerm_container_app" "backend" {
   }
 
   ingress {
-    external_enabled = false
+    external_enabled = false      # Private backend
     target_port      = 8080
     transport        = "auto"
 
@@ -74,7 +74,7 @@ resource "azurerm_container_app" "backend" {
 }
 
 #############################################
-# 💻 Frontend Container App
+# 💻 Frontend Container App (Public for testing)
 #############################################
 resource "azurerm_container_app" "frontend" {
   name                         = "p2-frontend"
@@ -94,7 +94,7 @@ resource "azurerm_container_app" "frontend" {
       #############################################
       env {
         name  = "VITE_API_URL"
-        value = "http://p2-backend.internal.politemeadow-35232c10.eastus.private.azurecontainerapps.io:8080"
+        value = "http://p2-backend.internal.p2-cae.eastus.azurecontainerapps.io:8080"
       }
 
       env {
@@ -105,7 +105,7 @@ resource "azurerm_container_app" "frontend" {
   }
 
   ingress {
-    external_enabled = false
+    external_enabled = true      # ✅ Public for AppGW access
     target_port      = 80
     transport        = "auto"
 
