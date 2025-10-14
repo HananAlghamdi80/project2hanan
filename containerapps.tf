@@ -51,7 +51,7 @@ resource "azurerm_container_app" "backend" {
   }
 
   ingress {
-    external_enabled = false      # Private backend
+    external_enabled = false      # 🔒 Limited to VNet
     target_port      = 8080
     transport        = "auto"
 
@@ -74,7 +74,7 @@ resource "azurerm_container_app" "backend" {
 }
 
 #############################################
-# 💻 Frontend Container App (Public for testing)
+# 💻 Frontend Container App (Private)
 #############################################
 resource "azurerm_container_app" "frontend" {
   name                         = "p2-frontend"
@@ -105,7 +105,7 @@ resource "azurerm_container_app" "frontend" {
   }
 
   ingress {
-    external_enabled = true      # ✅ Public for AppGW access
+    external_enabled = false      # 🔒 Limited to VNet (Private only)
     target_port      = 80
     transport        = "auto"
 
