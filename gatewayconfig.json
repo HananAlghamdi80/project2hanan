@@ -1,0 +1,10 @@
+{
+  "gatewayIpConfigurations": [
+    {
+      "name": "appgw-ipcfg",
+      "subnet": {
+        "id": "/subscriptions/4421688c-0a8d-4588-8dd0-338c5271d0af/resourceGroups/p2-rg/providers/Microsoft.Network/virtualNetworks/p2-vnet/subnets/snet-appgw"
+      }
+    }
+  ]
+}
