@@ -3,9 +3,9 @@
 #############################################
 
 resource "azurerm_mssql_server" "sql" {
-  name                          = "p2-sqlserver-hanan"   # ✅ اسم فريد
+  name                          = "p2-sqlserver-hanan3"   # ✅ اسم فريد
   resource_group_name           = data.azurerm_resource_group.rg.name
-  location                      = "Sweden Central"       # 🇸🇪 المنطقة الجديدة
+  location                      = "eastus2"      # 🇸🇪 المنطقة الجديدة
   version                       = "12.0"
   administrator_login           = "sqladminuser"
   administrator_login_password  = "Hh123@123"

@@ -68,34 +68,26 @@ resource "azurerm_application_gateway" "appgw" {
   }
 
   #################################
-  # Health Probes
+  # Health Probes (updated)
   #################################
   probe {
-    name                = "frontend-probe"
-    protocol            = "Http"
-    path                = "/"
-    interval            = 30
-    timeout             = 60
-    unhealthy_threshold = 3
-    host                = "p2-frontend.internal.politemeadow-35232c10.eastus.private.azurecontainerapps.io"
-
-    match {
-      status_code = ["200-399"]
-    }
+    name                                      = "frontend-probe"
+    protocol                                  = "Http"
+    path                                      = "/"
+    interval                                  = 30
+    timeout                                   = 10
+    unhealthy_threshold                       = 3
+    pick_host_name_from_backend_http_settings = true
   }
 
   probe {
-    name                = "backend-probe"
-    protocol            = "Http"
-    path                = "/api/health"
-    interval            = 30
-    timeout             = 60
-    unhealthy_threshold = 3
-    host                = "p2-backend.internal.politemeadow-35232c10.eastus.private.azurecontainerapps.io"
-
-    match {
-      status_code = ["200-399"]
-    }
+    name                                      = "backend-probe"
+    protocol                                  = "Http"
+    path                                      = "/actuator/health"
+    interval                                  = 30
+    timeout                                   = 10
+    unhealthy_threshold                       = 3
+    pick_host_name_from_backend_http_settings = true
   }
 
   #################################
@@ -105,20 +97,20 @@ resource "azurerm_application_gateway" "appgw" {
     name                  = "frontendHttpSettings"
     port                  = 80
     protocol              = "Http"
-    request_timeout       = 60
+    request_timeout       = 30
     cookie_based_affinity = "Disabled"
     probe_name            = "frontend-probe"
-    host_name             = "p2-frontend.internal.politemeadow-35232c10.eastus.private.azurecontainerapps.io"
+    host_name             = "p2-frontend.politemeadow-35232c10.eastus.azurecontainerapps.io"
   }
 
   backend_http_settings {
     name                  = "backendHttpSettings"
-    port                  = 8080
+    port                  = 80
     protocol              = "Http"
-    request_timeout       = 60
+    request_timeout       = 30
     cookie_based_affinity = "Disabled"
     probe_name            = "backend-probe"
-    host_name             = "p2-backend.internal.politemeadow-35232c10.eastus.private.azurecontainerapps.io"
+    host_name             = "p2-backend.politemeadow-35232c10.eastus.azurecontainerapps.io"
   }
 
   #################################
@@ -126,12 +118,13 @@ resource "azurerm_application_gateway" "appgw" {
   #################################
   backend_address_pool {
     name  = "frontendPool"
-    fqdns = ["p2-frontend.internal.politemeadow-35232c10.eastus.private.azurecontainerapps.io"]
+    fqdns = ["p2-frontend.politemeadow-35232c10.eastus.azurecontainerapps.io"]
   }
 
   backend_address_pool {
     name  = "backendPool"
-    fqdns = ["p2-backend.internal.politemeadow-35232c10.eastus.private.azurecontainerapps.io"]
+    fqdns = ["p2-backend.politemeadow-35232c10.eastus.azurecontainerapps.io"]
+    # fqdns = ["p2.backend.${container_apps_environment_default_domain_name}"]
   }
 
   #################################

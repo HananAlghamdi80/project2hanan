@@ -1,0 +1,140 @@
+{
+  "id": "/subscriptions/4421688c-0a8d-4588-8dd0-338c5271d0af/resourceGroups/p2-rg/providers/Microsoft.App/containerapps/p2-backend",
+  "identity": {
+    "type": "None"
+  },
+  "location": "East US",
+  "name": "p2-backend",
+  "properties": {
+    "configuration": {
+      "activeRevisionsMode": "Single",
+      "dapr": null,
+      "ingress": {
+        "additionalPortMappings": null,
+        "allowInsecure": false,
+        "clientCertificateMode": null,
+        "corsPolicy": null,
+        "customDomains": null,
+        "exposedPort": 0,
+        "external": true,
+        "fqdn": "p2-backend.politemeadow-35232c10.eastus.azurecontainerapps.io",
+        "ipSecurityRestrictions": null,
+        "stickySessions": null,
+        "targetPort": 8080,
+        "traffic": [
+          {
+            "latestRevision": true,
+            "weight": 100
+          }
+        ],
+        "transport": "Auto"
+      },
+      "maxInactiveRevisions": 100,
+      "registries": [
+        {
+          "identity": "",
+          "passwordSecretRef": "acr-password",
+          "server": "p2acrhanan123.azurecr.io",
+          "username": "p2acrhanan123"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "acr-password",
+          "value": "H3aGBerN0mLquNC1oToNX7iacgNZ5aSgf9P2ht0eM4+ACRBp6ZDx"
+        }
+      ],
+      "service": null
+    },
+    "customDomainVerificationId": "C5629A918A3FA55FF147545881A75721689136F00C9C862C48493941404CBD3C",
+    "delegatedIdentities": [],
+    "environmentId": "/subscriptions/4421688c-0a8d-4588-8dd0-338c5271d0af/resourceGroups/p2-rg/providers/Microsoft.App/managedEnvironments/p2-cae",
+    "eventStreamEndpoint": "https://eastus.azurecontainerapps.dev/subscriptions/4421688c-0a8d-4588-8dd0-338c5271d0af/resourceGroups/p2-rg/containerApps/p2-backend/eventstream",
+    "latestReadyRevisionName": "p2-backend--0000008",
+    "latestRevisionFqdn": "p2-backend--0000008.politemeadow-35232c10.eastus.azurecontainerapps.io",
+    "latestRevisionName": "p2-backend--0000008",
+    "managedEnvironmentId": "/subscriptions/4421688c-0a8d-4588-8dd0-338c5271d0af/resourceGroups/p2-rg/providers/Microsoft.App/managedEnvironments/p2-cae",
+    "outboundIpAddresses": [
+      "172.212.38.62"
+    ],
+    "provisioningState": "Succeeded",
+    "runningStatus": "Running",
+    "template": {
+      "containers": [
+        {
+          "env": [
+            {
+              "name": "DB_URL",
+              "value": "jdbc:sqlserver://p2-sqlserver-hanan.database.windows.net:1433;database=hanandb;encrypt=true;trustServerCertificate=false;loginTimeout=30;"
+            },
+            {
+              "name": "DB_USER",
+              "value": "sqladminuser"
+            },
+            {
+              "name": "DB_PASS",
+              "value": "Hh123@123"
+            },
+            {
+              "name": "PORT",
+              "value": "8080"
+            },
+            {
+              "name": "template.scale.minReplicas",
+              "value": "1"
+            }
+          ],
+          "image": "p2acrhanan123.azurecr.io/p2-backend:latest",
+          "name": "backend",
+          "probes": [
+            {
+              "type": "Liveness",
+              "httpGet": {
+                "path": "/health",
+                "port": 8080
+              },
+              "initialDelaySeconds": 10,
+              "periodSeconds": 30
+            },
+            {
+              "type": "Readiness",
+              "httpGet": {
+                "path": "/health",
+                "port": 8080
+              },
+              "initialDelaySeconds": 5,
+              "periodSeconds": 20
+            }
+          ],
+          "resources": {
+            "cpu": 0.5,
+            "ephemeralStorage": "2Gi",
+            "memory": "1Gi"
+          }
+        }
+      ],
+      "initContainers": null,
+      "revisionSuffix": "",
+      "scale": {
+        "maxReplicas": 10,
+        "minReplicas": null,
+        "rules": null
+      },
+      "serviceBinds": null,
+      "terminationGracePeriodSeconds": null,
+      "volumes": []
+    },
+    "workloadProfileName": null
+  },
+  "resourceGroup": "p2-rg",
+  "systemData": {
+    "createdAt": "2025-10-13T18:10:25.7592555",
+    "createdBy": "d55ac64f-cac6-41fd-9a59-6446e2a138d1",
+    "createdByType": "Application",
+    "lastModifiedAt": "2025-10-14T14:37:38.4857994",
+    "lastModifiedBy": "d55ac64f-cac6-41fd-9a59-6446e2a138d1",
+    "lastModifiedByType": "Application"
+  },
+  "tags": {},
+  "type": "Microsoft.App/containerApps"
+}
