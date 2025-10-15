@@ -1,10 +1,10 @@
-name: Frontend CI/CD
+name: Backend CI/CD
 
 on:
   push:
-    branches: [ "main", "test-cicd"  ]
+    branches: [ "main", "test-cicd" ]
     paths:
-      - "apps/frontend/**"
+      - "apps/backend/**"
 
 jobs:
   build-deploy:
@@ -14,24 +14,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
-          node-version: 18
+          java-version: '17'
+          distribution: 'temurin'
 
-      - name: Install dependencies and build frontend
-        working-directory: apps/frontend
-        run: |
-          npm ci
-          npm run build
+      - name: Build backend with Maven
+        working-directory: apps/backend
+        run: mvn clean package -DskipTests=false
 
-      - name: Analyze frontend code with SonarCloud
+      - name: Analyze backend code with SonarCloud
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=HananAlghamdi80_project2hanan-frontend
+            -Dsonar.projectKey=HananAlghamdi80_project2hanan-backend
             -Dsonar.organization=hanan-projects
             -Dsonar.host.url=https://sonarcloud.io
 
@@ -43,9 +42,10 @@ jobs:
       - name: Build and push image to ACR
         run: |
           az acr login --name p2acrhanan123
-          docker build -t p2acrhanan123.azurecr.io/frontend:latest ./apps/frontend
-          docker push p2acrhanan123.azurecr.io/frontend:latest
+          docker build -t p2acrhanan123.azurecr.io/backend:latest ./apps/backend
+          docker push p2acrhanan123.azurecr.io/backend:latest
 
       - name: Deploy to Azure Container App
         run: |
-          az containerapp update -n p2-frontend -g p2-rg --image p2acrhanan123.azurecr.io/frontend:latest
+          az containerapp update -n p2-backend -g p2-rg --image p2acrhanan123.azurecr.io/backend:latest
+
